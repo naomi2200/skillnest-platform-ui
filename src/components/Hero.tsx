@@ -1,9 +1,18 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, BookOpen, Users, Star, Award } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 
 export const Hero = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    navigate("/catalog");
+  };
+
   return (
     <section className="relative overflow-hidden gradient-hero py-20">
       <div className="container mx-auto px-4">
@@ -27,9 +36,12 @@ export const Hero = () => {
                 <Input
                   placeholder="¿Qué quieres aprender hoy?"
                   className="pl-10 h-12"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 />
               </div>
-              <Button size="lg" className="gradient-primary hover:opacity-90">
+              <Button size="lg" className="gradient-primary hover:opacity-90" onClick={handleSearch}>
                 Buscar
               </Button>
             </div>
