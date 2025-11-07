@@ -38,6 +38,11 @@ export const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-3">
+            <NavLink to="/dashboard">
+              <Button variant="outline" size="sm">
+                Dashboard
+              </Button>
+            </NavLink>
             <Button variant="outline" size="sm">
               Iniciar sesión
             </Button>
