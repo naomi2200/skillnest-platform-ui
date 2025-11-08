@@ -152,7 +152,10 @@ export default function Dashboard() {
                       </div>
 
                       <div className="flex gap-2 pt-2">
-                        <Button className="flex-1 gradient-primary hover:opacity-90">
+                        <Button 
+                          className="flex-1 gradient-primary hover:opacity-90"
+                          onClick={() => window.open('https://meet.jit.si/skillnest-' + mentorship.mentor.toLowerCase().replace(/\s+/g, '-'), '_blank')}
+                        >
                           <Video className="h-4 w-4 mr-2" />
                           Unirse
                         </Button>

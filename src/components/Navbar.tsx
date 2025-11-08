@@ -40,7 +40,17 @@ export const Navbar = () => {
           <div className="flex items-center gap-3">
             <NavLink to="/dashboard">
               <Button variant="outline" size="sm">
-                Dashboard
+                Estudiante
+              </Button>
+            </NavLink>
+            <NavLink to="/mentor-dashboard">
+              <Button variant="outline" size="sm">
+                Mentor
+              </Button>
+            </NavLink>
+            <NavLink to="/admin">
+              <Button variant="outline" size="sm">
+                Admin
               </Button>
             </NavLink>
             <Button variant="outline" size="sm">
