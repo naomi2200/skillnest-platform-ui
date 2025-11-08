@@ -203,7 +203,12 @@ const Index = () => {
                   </li>
                 </ul>
               </div>
-              <Button size="lg" variant="secondary" className="w-full md:w-auto">
+              <Button 
+                size="lg" 
+                variant="secondary" 
+                className="w-full md:w-auto"
+                onClick={() => window.location.href = '/catalog'}
+              >
                 Explorar cursos
               </Button>
             </div>
@@ -229,7 +234,19 @@ const Index = () => {
                   </li>
                 </ul>
               </div>
-              <Button size="lg" variant="secondary" className="w-full md:w-auto">
+              <Button 
+                size="lg" 
+                variant="secondary" 
+                className="w-full md:w-auto"
+                onClick={() => {
+                  const auth = document.querySelector('[data-auth-context]') as any;
+                  if (auth?.isAuthenticated) {
+                    window.location.href = '/mentor-dashboard';
+                  } else {
+                    (window as any).openAuthModal?.('signup');
+                  }
+                }}
+              >
                 Comenzar a enseñar
               </Button>
             </div>

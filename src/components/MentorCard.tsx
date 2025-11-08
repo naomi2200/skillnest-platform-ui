@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface MentorCardProps {
   name: string;
@@ -21,6 +22,13 @@ export const MentorCard = ({
   pricePerHour,
   available,
 }: MentorCardProps) => {
+  const navigate = useNavigate();
+  
+  const handleViewProfile = () => {
+    const mentorSlug = name.toLowerCase().replace(/\s+/g, '-');
+    navigate(`/mentor/${mentorSlug}`);
+  };
+
   return (
     <Card className="p-6 hover-lift shadow-card hover:shadow-hover transition-all text-center">
       <div className="space-y-4">
@@ -50,7 +58,7 @@ export const MentorCard = ({
 
         <div className="pt-2 border-t">
           <p className="text-2xl font-bold mb-3">S/ {pricePerHour}/hora</p>
-          <Button className="w-full gradient-primary hover:opacity-90">
+          <Button className="w-full gradient-primary hover:opacity-90" onClick={handleViewProfile}>
             Ver perfil
           </Button>
         </div>

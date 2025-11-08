@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -5,10 +6,33 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Star, Users, Clock, Globe, Check } from "lucide-react";
+import { PaymentModal } from "@/components/PaymentModal";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/hooks/use-toast";
 import courseLaravel from "@/assets/course-laravel.jpg";
 
 export default function CourseDetail() {
   const { id } = useParams();
+  const { isAuthenticated, openAuthModal } = useAuth();
+  const [paymentOpen, setPaymentOpen] = useState(false);
+
+  const coursePrice = 149;
+  const courseName = "Laravel Avanzado: De Cero a Experto";
+
+  const handleEnroll = () => {
+    if (!isAuthenticated) {
+      openAuthModal('signup');
+      return;
+    }
+    setPaymentOpen(true);
+  };
+
+  const handlePaymentSuccess = () => {
+    toast({
+      title: "¡Compra exitosa!",
+      description: "Ahora tienes acceso al curso. ¡Comienza a aprender!",
+    });
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -137,8 +161,12 @@ export default function CourseDetail() {
                   <Badge variant="outline" className="mb-4">-25% de descuento</Badge>
                 </div>
 
-                <Button className="w-full gradient-primary hover:opacity-90" size="lg">
-                  Inscribirme ahora
+                <Button 
+                  className="w-full gradient-primary hover:opacity-90" 
+                  size="lg"
+                  onClick={handleEnroll}
+                >
+                  Comprar curso
                 </Button>
 
                 <p className="text-xs text-center text-muted-foreground">
@@ -171,6 +199,14 @@ export default function CourseDetail() {
           </div>
         </div>
       </main>
+
+      <PaymentModal
+        open={paymentOpen}
+        onClose={() => setPaymentOpen(false)}
+        amount={coursePrice}
+        itemName={courseName}
+        onSuccess={handlePaymentSuccess}
+      />
 
       <Footer />
     </div>
