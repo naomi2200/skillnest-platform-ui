@@ -19,11 +19,11 @@ import { Separator } from "@/components/ui/separator";
 
 const menuItems = [
   { title: "Inicio", url: "/dashboard", icon: Home },
-  { title: "Mis Cursos", url: "/dashboard/courses", icon: BookOpen },
-  { title: "Mentorías", url: "/dashboard/mentorships", icon: Target },
-  { title: "Mensajes", url: "/dashboard/messages", icon: MessageSquare, badge: 3 },
-  { title: "Perfil", url: "/dashboard/profile", icon: User },
-  { title: "Configuración", url: "/dashboard/settings", icon: Settings },
+  { title: "Mis Cursos", url: "/catalog", icon: BookOpen },
+  { title: "Mentorías", url: "/mentors", icon: Target },
+  { title: "Mensajes", url: "/dashboard", icon: MessageSquare, badge: 3 },
+  { title: "Perfil", url: "/dashboard", icon: User },
+  { title: "Configuración", url: "/dashboard", icon: Settings },
 ];
 
 export function StudentSidebar() {

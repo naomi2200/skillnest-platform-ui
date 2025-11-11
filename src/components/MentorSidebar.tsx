@@ -17,14 +17,14 @@ import { Button } from "@/components/ui/button";
 
 const menuItems = [
   { title: "Inicio", icon: Home, url: "/mentor-dashboard" },
-  { title: "Mis Cursos", icon: BookOpen, url: "/mentor-dashboard/courses" },
-  { title: "Mis Mentorías", icon: Video, url: "/mentor-dashboard/mentorships" },
-  { title: "Agenda", icon: Calendar, url: "/mentor-dashboard/schedule" },
-  { title: "Mensajes", icon: MessageSquare, url: "/mentor-dashboard/messages", badge: 5 },
-  { title: "Pagos", icon: DollarSign, url: "/mentor-dashboard/payments" },
-  { title: "Reseñas", icon: Star, url: "/mentor-dashboard/reviews" },
-  { title: "Perfil", icon: User, url: "/mentor-dashboard/profile" },
-  { title: "Configuración", icon: Settings, url: "/mentor-dashboard/settings" },
+  { title: "Mis Cursos", icon: BookOpen, url: "/mentor-dashboard" },
+  { title: "Mis Mentorías", icon: Video, url: "/mentor-dashboard" },
+  { title: "Agenda", icon: Calendar, url: "/mentor-dashboard" },
+  { title: "Mensajes", icon: MessageSquare, url: "/mentor-dashboard", badge: 5 },
+  { title: "Pagos", icon: DollarSign, url: "/mentor-dashboard" },
+  { title: "Reseñas", icon: Star, url: "/mentor-dashboard" },
+  { title: "Perfil", icon: User, url: "/mentor-dashboard" },
+  { title: "Configuración", icon: Settings, url: "/mentor-dashboard" },
 ];
 
 export const MentorSidebar = () => {
