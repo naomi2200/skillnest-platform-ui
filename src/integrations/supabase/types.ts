@@ -14,7 +14,166 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      course_enrollments: {
+        Row: {
+          course_id: string
+          enrolled_at: string | null
+          id: string
+          progress: number | null
+          student_id: string
+        }
+        Insert: {
+          course_id: string
+          enrolled_at?: string | null
+          id?: string
+          progress?: number | null
+          student_id: string
+        }
+        Update: {
+          course_id?: string
+          enrolled_at?: string | null
+          id?: string
+          progress?: number | null
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_enrollments_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      courses: {
+        Row: {
+          category: string
+          created_at: string | null
+          description: string | null
+          duration: number | null
+          id: string
+          image_url: string | null
+          level: string | null
+          mentor_id: string
+          price: number
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          description?: string | null
+          duration?: number | null
+          id?: string
+          image_url?: string | null
+          level?: string | null
+          mentor_id: string
+          price: number
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          duration?: number | null
+          id?: string
+          image_url?: string | null
+          level?: string | null
+          mentor_id?: string
+          price?: number
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      mentorship_sessions: {
+        Row: {
+          created_at: string | null
+          duration: number | null
+          id: string
+          mentor_id: string
+          mentorship_id: string
+          message: string | null
+          scheduled_date: string
+          status: string | null
+          student_id: string
+          topic: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          duration?: number | null
+          id?: string
+          mentor_id: string
+          mentorship_id: string
+          message?: string | null
+          scheduled_date: string
+          status?: string | null
+          student_id: string
+          topic?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          duration?: number | null
+          id?: string
+          mentor_id?: string
+          mentorship_id?: string
+          message?: string | null
+          scheduled_date?: string
+          status?: string | null
+          student_id?: string
+          topic?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mentorship_sessions_mentorship_id_fkey"
+            columns: ["mentorship_id"]
+            isOneToOne: false
+            referencedRelation: "mentorships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mentorships: {
+        Row: {
+          available: boolean | null
+          created_at: string | null
+          description: string | null
+          id: string
+          mentor_id: string
+          price_per_hour: number
+          specialty: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          available?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          mentor_id: string
+          price_per_hour: number
+          specialty: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          available?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          mentor_id?: string
+          price_per_hour?: number
+          specialty?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
