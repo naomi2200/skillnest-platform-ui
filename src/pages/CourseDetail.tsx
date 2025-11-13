@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -9,15 +9,49 @@ import { Star, Users, Clock, Globe, Check } from "lucide-react";
 import { PaymentModal } from "@/components/PaymentModal";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import courseLaravel from "@/assets/course-laravel.jpg";
 
 export default function CourseDetail() {
   const { id } = useParams();
-  const { isAuthenticated, openAuthModal } = useAuth();
+  const navigate = useNavigate();
+  const { isAuthenticated, openAuthModal, user } = useAuth();
   const [paymentOpen, setPaymentOpen] = useState(false);
+  const [course, setCourse] = useState<any>(null);
+  const [enrollment, setEnrollment] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  const coursePrice = 149;
-  const courseName = "Laravel Avanzado: De Cero a Experto";
+  useEffect(() => {
+    fetchCourseData();
+  }, [id, user]);
+
+  const fetchCourseData = async () => {
+    try {
+      const { data: courseData } = await supabase
+        .from('courses')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      setCourse(courseData);
+
+      if (user) {
+        const { data: enrollmentData } = await supabase
+          .from('course_enrollments')
+          .select('*')
+          .eq('course_id', id)
+          .eq('student_id', user.id)
+          .maybeSingle();
+
+        setEnrollment(enrollmentData);
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching course:', error);
+      setLoading(false);
+    }
+  };
 
   const handleEnroll = () => {
     if (!isAuthenticated) {
@@ -27,12 +61,43 @@ export default function CourseDetail() {
     setPaymentOpen(true);
   };
 
-  const handlePaymentSuccess = () => {
-    toast({
-      title: "¡Compra exitosa!",
-      description: "Ahora tienes acceso al curso. ¡Comienza a aprender!",
-    });
+  const handlePaymentSuccess = async () => {
+    try {
+      const { error } = await supabase
+        .from('course_enrollments')
+        .insert({
+          student_id: user?.id,
+          course_id: id,
+          progress: 0
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "¡Compra exitosa!",
+        description: "Ahora tienes acceso al curso. ¡Comienza a aprender!",
+      });
+
+      navigate(`/learn/${id}`);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Error al inscribirse al curso",
+        variant: "destructive",
+      });
+    }
   };
+
+  const handleContinueLearning = () => {
+    navigate(`/learn/${id}`);
+  };
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Cargando...</div>;
+  }
+
+  const coursePrice = course?.price || 149;
+  const courseName = course?.title || "Laravel Avanzado: De Cero a Experto";
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -43,12 +108,12 @@ export default function CourseDetail() {
         <div className="gradient-hero py-12">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl">
-              <Badge className="mb-4">Programación</Badge>
+              <Badge className="mb-4">{course?.category || 'Programación'}</Badge>
               <h1 className="text-4xl font-bold mb-4">
-                Laravel Avanzado: De Cero a Experto
+                {courseName}
               </h1>
               <p className="text-xl text-muted-foreground mb-6">
-                Domina Laravel y construye aplicaciones web profesionales desde cero
+                {course?.description || 'Domina Laravel y construye aplicaciones web profesionales desde cero'}
               </p>
               
               <div className="flex flex-wrap items-center gap-6 text-sm">
@@ -155,19 +220,27 @@ export default function CourseDetail() {
               <div className="border rounded-lg p-6 shadow-hover sticky top-4 space-y-4">
                 <div className="text-center">
                   <div className="flex items-baseline justify-center gap-2 mb-2">
-                    <span className="text-3xl font-bold">S/ 149</span>
-                    <span className="text-xl text-muted-foreground line-through">S/ 199</span>
+                    <span className="text-3xl font-bold">S/ {coursePrice}</span>
                   </div>
-                  <Badge variant="outline" className="mb-4">-25% de descuento</Badge>
                 </div>
 
-                <Button 
-                  className="w-full gradient-primary hover:opacity-90" 
-                  size="lg"
-                  onClick={handleEnroll}
-                >
-                  Comprar curso
-                </Button>
+                {enrollment ? (
+                  <Button 
+                    className="w-full gradient-primary hover:opacity-90" 
+                    size="lg"
+                    onClick={handleContinueLearning}
+                  >
+                    Continuar aprendiendo
+                  </Button>
+                ) : (
+                  <Button 
+                    className="w-full gradient-primary hover:opacity-90" 
+                    size="lg"
+                    onClick={handleEnroll}
+                  >
+                    Comprar curso
+                  </Button>
+                )}
 
                 <p className="text-xs text-center text-muted-foreground">
                   Garantía de devolución de 30 días
