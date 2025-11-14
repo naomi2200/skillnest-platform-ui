@@ -11,7 +11,7 @@ import Mentors from "./pages/Mentors";
 import MentorProfile from "./pages/MentorProfile";
 import ScheduleMentorship from "./pages/ScheduleMentorship";
 import CourseDetail from "./pages/CourseDetail";
-
+import CourseLearning from "./pages/CourseLearning";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import MentorDashboard from "./pages/MentorDashboard";
@@ -36,6 +36,7 @@ const App = () => (
             <Route path="/mentor/:mentorId" element={<MentorProfile />} />
             <Route path="/schedule-mentorship/:mentorId" element={<ScheduleMentorship />} />
             <Route path="/course/:id" element={<CourseDetail />} />
+            <Route path="/courses/:id/learn" element={<CourseLearning />} />
             
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/mentor-dashboard" element={<MentorDashboard />} />
