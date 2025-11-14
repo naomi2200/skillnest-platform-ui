@@ -48,25 +48,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchUserProfile = async (userId: string) => {
     try {
       const { data: profile } = await supabase
-        .from('profiles')
+        .from('profiles' as any)
         .select('*')
         .eq('id', userId)
         .single();
 
       const { data: roles } = await supabase
-        .from('user_roles')
+        .from('user_roles' as any)
         .select('role')
         .eq('user_id', userId);
 
-      const userRoles = roles?.map(r => r.role) || [];
+      const userRoles = roles?.map((r: any) => r.role) || [];
 
       const authUser = await supabase.auth.getUser();
       
       setUser({
         id: userId,
         email: authUser.data.user?.email || '',
-        full_name: profile?.full_name || null,
-        avatar_url: profile?.avatar_url || null,
+        full_name: (profile as any)?.full_name || null,
+        avatar_url: (profile as any)?.avatar_url || null,
         roles: userRoles,
       });
     } catch (error) {
@@ -144,7 +144,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (data.user) {
         // Create user role
-        await supabase.from('user_roles').insert({
+        await supabase.from('user_roles' as any).insert({
           user_id: data.user.id,
           role: role,
         });
