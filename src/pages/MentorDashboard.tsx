@@ -3,9 +3,10 @@ import { MentorSidebar } from "@/components/MentorSidebar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Users, DollarSign, TrendingUp, Calendar, CheckCircle, X } from "lucide-react";
+import { BookOpen, Users, DollarSign, TrendingUp, Calendar, CheckCircle, X, Edit } from "lucide-react";
 import { CreateCourseModal } from "@/components/CreateCourseModal";
 import { CreateMentorshipModal } from "@/components/CreateMentorshipModal";
+import { CourseEditor } from "@/components/CourseEditor";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -19,6 +20,8 @@ export default function MentorDashboard() {
   const [mentorships, setMentorships] = useState<any[]>([]);
   const [sessions, setSessions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
+  const [showEditor, setShowEditor] = useState(false);
 
   const loadData = async () => {
     if (!user) return;
@@ -78,6 +81,40 @@ export default function MentorDashboard() {
       toast.error(error.message || "Error al rechazar solicitud");
     }
   };
+
+  const handleEditCourse = (courseId: string) => {
+    setSelectedCourse(courseId);
+    setShowEditor(true);
+  };
+
+  const handleCloseEditor = () => {
+    setShowEditor(false);
+    setSelectedCourse(null);
+    loadData();
+  };
+
+  if (showEditor) {
+    return (
+      <SidebarProvider>
+        <div className="min-h-screen flex w-full">
+          <MentorSidebar />
+          <div className="flex-1 p-8">
+            <Button
+              variant="ghost"
+              onClick={handleCloseEditor}
+              className="mb-4"
+            >
+              ← Volver al Dashboard
+            </Button>
+            <CourseEditor
+              courseId={selectedCourse || undefined}
+              onSave={handleCloseEditor}
+            />
+          </div>
+        </div>
+      </SidebarProvider>
+    );
+  }
 
   return (
     <SidebarProvider>
@@ -287,7 +324,13 @@ export default function MentorDashboard() {
                         </div>
 
                         <div className="flex md:flex-col gap-2">
-                          <Button variant="outline" size="sm" className="flex-1">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="flex-1"
+                            onClick={() => handleEditCourse(course.id)}
+                          >
+                            <Edit className="h-4 w-4 mr-2" />
                             Editar
                           </Button>
                           <Button variant="outline" size="sm" className="flex-1">
